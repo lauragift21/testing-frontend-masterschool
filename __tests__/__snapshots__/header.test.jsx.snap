@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header creates a snapshot 1`] = `
+<DocumentFragment>
+  <header>
+    <nav
+      class="text-lg bg-orange-500 py-2 font-bold"
+    >
+      <p
+        class="navbar-brand"
+      >
+        Hacker News Clone
+      </p>
+    </nav>
+  </header>
+</DocumentFragment>
+`;

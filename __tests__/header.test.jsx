@@ -7,5 +7,10 @@ describe('Header', () => {
     render(<Header />);
     expect(screen.getByText('Hacker News Clone')).toBeInTheDocument();
   });
+
+  it('creates a snapshot', () => {
+    const { asFragment } = render(<Header />);
+    expect(asFragment()).toMatchSnapshot();
+  });
 }
 );
