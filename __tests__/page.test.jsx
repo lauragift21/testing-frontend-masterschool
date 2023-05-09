@@ -1,19 +1,16 @@
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import News from "../src/app/page";
 
 const server = setupServer(
   // Mock the response for the top stories
-  rest.get("https://hacker-news.firebaseio.com/v0/newstories.json", (req, res, ctx) => {
-    return res(
-      ctx.json([
-        1,
-        2,
-        3,
-      ])
-    );
-  }),
+  rest.get(
+    "https://hacker-news.firebaseio.com/v0/newstories.json",
+    (req, res, ctx) => {
+      return res(ctx.json([1, 2, 3]));
+    }
+  ),
   rest.get(
     "https://hacker-news.firebaseio.com/v0/item/:id.json",
     (req, res, ctx) => {
@@ -39,12 +36,16 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe("News", () => {
-  it('renders the loading state initially', () => {
+  it("renders the loading state initially", () => {
     // Render the News component
-    const { getByTestId } = render(<div><News /></div>);
+    const { getByTestId } = render(
+      <div>
+        <News />
+      </div>
+    );
 
     // Check if the loading state is rendered initially
-    expect(getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(getByTestId("loading-spinner")).toBeInTheDocument();
   });
 
   it("renders the posts", async () => {
@@ -56,20 +57,20 @@ describe("News", () => {
     });
 
     // Render the News component
-    const { getByTestId, findByText } = render(
+    render(
       <div>
         <News />
       </div>
     );
 
     // Check if the loading state is rendered initially
-    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
 
     // Wait for the posts to be loaded
     await waitFor(() => {
-      findByText("Post 2");
-      findByText("Post 1");
-      findByText("Post 3");
+      screen.getByText("Post 1");
+      screen.getByText("Post 2");
+      screen.getByText("Post 3");
     });
   });
 });
