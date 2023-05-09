@@ -22,14 +22,14 @@ const Posts = ({ posts }) => {
       <div className="news">
         {posts.map((post, key) => (
           <div className="card-long" key={key}>
-            {/* <span className="text-muted">{key + 1}</span> */}
+            <span className="text-muted">{key + 1}</span>
             &#160;
             <a href={post.url} target="_blank">
               {post.title}
             </a>
             <div className="sub">
               {post.score} points by {post.by}
-              &#160; <TimeAgo datetime={post.date} /> | {post.descendants} comments
+              &#160; <TimeAgo datetime={new Date(post.time * 1000)} /> | {post.descendants} comments
             </div>
           </div>
         ))}
