@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer create a snapshot 1`] = `
+<DocumentFragment>
+  <footer
+    class="text-md py-2"
+  >
+    <span
+      class="float-left"
+    >
+      2023 Y.
+    </span>
+    <span
+      class="float-right"
+    >
+       All rights reserved ©
+    </span>
+  </footer>
+</DocumentFragment>
+`;
