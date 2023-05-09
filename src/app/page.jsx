@@ -10,7 +10,7 @@ const url = "https://hacker-news.firebaseio.com/v0/newstories.json";
 const Posts = ({ posts }) => {
   if (posts.length === 0) {
     return (
-      <div className="loader">
+      <div className="loader" data-testid="loading-spinner">
         <ClipLoader size={50} color="#000" loading={true} />
       </div>
     );

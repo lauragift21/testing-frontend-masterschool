@@ -2,12 +2,12 @@ import { render, screen } from '@testing-library/react';
 import Header from '../src/app/header';
 
 describe('Header', () => {
-  it('renders without crashing', () => {
+  it('renders the Header component without crashing', () => {
     render(<Header />);
     expect(screen.getByText('Hacker News Clone')).toBeInTheDocument();
   });
 
-  it('creates a snapshot', () => {
+  it("create a snapshot", () => {
     const { asFragment } = render(<Header />);
     expect(asFragment()).toMatchSnapshot();
   });
