@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+.swc/
 # next.js
 /.next/
 /out/
