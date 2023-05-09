@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Header from "./header";
-import Footer from "./footer";
+import Header from "./components/header";
+import Footer from "./components/footer";
 import TimeAgo from "timeago-react";
 import { ClipLoader } from "react-spinners";
 
