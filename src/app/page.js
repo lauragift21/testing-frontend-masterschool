@@ -1,36 +1,40 @@
 "use client";
 import { useState, useEffect } from "react";
-import Header from './header';
+import Header from "./header";
 import Footer from "./footer";
-import TimeAgo from 'timeago-react'; 
+import TimeAgo from "timeago-react";
+import { ClipLoader } from "react-spinners";
 
 const url = "https://hacker-news.firebaseio.com/v0/newstories.json";
 
 const Posts = ({ posts }) => {
-  const vkey = 0;
   if (posts.length === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loader">
+        <ClipLoader size={50} color="#000" loading={true} />
+      </div>
+    );
   }
 
   return (
     <>
-    <Header />
-    <div className="news">
-      {posts.map((post, key) => (
-        <div className="card-long" key={key}>
-          {/* <span className="text-muted">{this.vkey = ++key}</span>  */}
-          &#160;
-          <a href={post.url} target="_blank">
-            {post.title}
-          </a>
-          <div className="sub">
-            {post.score} points by {post.by}
-            &#160; <TimeAgo datetime={post.date} /> | {post.descendants} comments
+      <Header />
+      <div className="news">
+        {posts.map((post, key) => (
+          <div className="card-long" key={key}>
+            {/* <span className="text-muted">{key + 1}</span> */}
+            &#160;
+            <a href={post.url} target="_blank">
+              {post.title}
+            </a>
+            <div className="sub">
+              {post.score} points by {post.by}
+              &#160; <TimeAgo datetime={post.date} /> | {post.descendants} comments
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-    <Footer />
+        ))}
+      </div>
+      <Footer />
     </>
   );
 };
