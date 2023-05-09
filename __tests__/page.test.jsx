@@ -1,38 +1,75 @@
-import { render, screen } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
 import News from "../src/app/page";
 
-describe("News component", () => {
-  beforeEach(() => {
-    // Clear the mock implementation of fetch
-    fetch.resetMocks();
+const server = setupServer(
+  // Mock the response for the top stories
+  rest.get("https://hacker-news.firebaseio.com/v0/newstories.json", (req, res, ctx) => {
+    return res(
+      ctx.json([
+        1,
+        2,
+        3,
+      ])
+    );
+  }),
+  rest.get(
+    "https://hacker-news.firebaseio.com/v0/item/:id.json",
+    (req, res, ctx) => {
+      const { id } = req.params;
+      // Mock the response for each item
+      return res(
+        ctx.json({
+          id,
+          title: `Post ${id}`,
+          url: `https://example.com/${id}`,
+          score: 100,
+          by: "John Doe",
+          time: 1620700000,
+        })
+      );
+    }
+  )
+);
+
+// Setup before running the tests
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe("News", () => {
+  it('renders the loading state initially', () => {
+    // Render the News component
+    const { getByTestId } = render(<div><News /></div>);
+
+    // Check if the loading state is rendered initially
+    expect(getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
-  it("renders the Page component without crashing", () => {
-    render(<News />);
-    const spinner = screen.getByTestId("loading-spinner");
-    expect(spinner).toBeInTheDocument();
-  });
-
-  it("renders posts correctly when posts are available", async () => {
-    const mockTopStories = [1, 2, 3];
-    const mockPosts = [
-      {
-        by: "John",
-        descendants: 0,
-        id: 1,
-        score: 10,
-        time: 1600000000,
-        title: "Test Post 1",
-        type: "story",
-        url: "https://example.com",
-      }
-    ];
-
-    fetch.mockResponseOnce(JSON.stringify(mockTopStories));
-    mockPosts.forEach((post) => {
-      fetch.mockResponseOnce(JSON.stringify(post));
+  it("renders the posts", async () => {
+    // Mock the response for the top stories
+    const topStories = [1, 2, 3]; // Example story IDs
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(topStories),
     });
 
-    render(<News />);
+    // Render the News component
+    const { getByTestId, findByText } = render(
+      <div>
+        <News />
+      </div>
+    );
+
+    // Check if the loading state is rendered initially
+    expect(getByTestId("loading-spinner")).toBeInTheDocument();
+
+    // Wait for the posts to be loaded
+    await waitFor(() => {
+      findByText("Post 2");
+      findByText("Post 1");
+      findByText("Post 3");
+    });
   });
 });
